@@ -151,7 +151,7 @@ class Graph:
         """
         # instantiate empty stack and push the starting node
         s = Stack()
-        s.push(starting_vertex)
+        s.push([starting_vertex])
 
         # create a set to store the visited nodes
         visited = set()
@@ -165,7 +165,7 @@ class Graph:
 
             # if that vertex hasn't been visited
             if v not in visited:
-                # visit it <3 and mark as visited
+                # visit it and mark as visited
                 visited.add(v)
 
                 # check if vertex is the target
@@ -173,7 +173,7 @@ class Graph:
                     # if so, return path
                     return path
                 
-                # add a path to neighbors stack
+                # add path to neighbors stack
                 for edge in self.get_neighbors(v):
                     new_path = list(path) # copy path
                     new_path.append(edge) # append the neighbor to the end
