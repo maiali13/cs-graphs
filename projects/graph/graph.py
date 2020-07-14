@@ -103,18 +103,45 @@ class Graph:
             if next_vert not in visited:
                 self.dft_recursive(next_vert, visited)
 
-
-
     def bfs(self, starting_vertex, destination_vertex):
         """
+        breadth-first search
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        # instantiate empty queue and enqueue path to the starting node
+        q = Queue()
+        q.enqueue([starting_vertex])
+
+        # create set to store visited vertices
+        visited = set()
+
+        while q.size() > 0:
+            path = q.dequeue() # dequeue first path
+
+            # grab last item from end of path
+            v = path[-1]
+            
+            # if that vertex hasn't been visited
+            if v not in visited:
+                # visit it <3 and mark as visited
+                visited.add(v)
+                
+                # check if vertex is the target
+                if v is destination_vertex:
+                    # if so, return path
+                    return path
+                
+                # add a path to neighbors queue
+                for next_vert in self.get_neighbors(v):
+                    new_path = list(path) # copy path
+                    new_path.append(next_vert) # append the neighbor to the end
+                    q.enqueue(new_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
+        deapth-first search
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
@@ -123,11 +150,10 @@ class Graph:
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
+        deapth-first search with recursion
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
-
-        This should be done using recursion.
         """
         pass  # TODO
 
