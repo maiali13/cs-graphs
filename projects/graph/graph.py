@@ -22,7 +22,7 @@ class Graph:
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2)  # set v2 as a neighbor of v1
         else: 
-            raise IndexError("That vertex does not exist!")
+            raise IndexError("Cannot add an edge to a vertex that does not exist!")
 
     def get_neighbors(self, vertex_id):
         """
@@ -59,19 +59,51 @@ class Graph:
 
     def dft(self, starting_vertex):
         """
+        depth-first traversal with a stack
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # instantaite empty stack and push the starting node
+        s = Stack()
+        s.push(starting_vertex)
 
-    def dft_recursive(self, starting_vertex):
+        # create a set to store the visited nodes
+        visited = set()
+
+        # while stack not empty
+        while s.size() > 0:
+            # pop the first item
+            v = s.pop()
+            # if it's not been visited:
+            if v not in visited:
+                # visit it <3 and add to visited set
+                visited.add(v)
+                print(f"DFT Visited {v}")
+
+                # add all neighbors to end of the stack
+                for next_vert in self.get_neighbors(v):
+                    s.push(next_vert)
+
+    def dft_recursive(self, starting_vertex, visited=None):
         """
+        depth-first traversal with recusion
         Print each vertex in depth-first order
         beginning from starting_vertex.
-
-        This should be done using recursion.
         """
-        pass  # TODO
+        # create set
+        if visited is None:
+            visited = set()
+        
+        # visit and add vertex to visited set
+        print(f"DFT Recusive Visted: {starting_vertex}")
+        visited.add(starting_vertex)
+
+        # recusively visit and add to set for all neighbors
+        for next_vert in self.vertices[starting_vertex]:
+            if next_vert not in visited:
+                self.dft_recursive(next_vert, visited)
+
+
 
     def bfs(self, starting_vertex, destination_vertex):
         """
