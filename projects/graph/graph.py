@@ -20,7 +20,7 @@ class Graph:
         Add a directed edge to the graph.
         """
         if v1 in self.vertices and v2 in self.vertices:
-            self.vertices[v1].add[v2]  # set v2 as a neighbor of v1
+            self.vertices[v1].add(v2)  # set v2 as a neighbor of v1
         else: 
             raise IndexError("That vertex does not exist!")
 
@@ -36,7 +36,26 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # instantaite empty queue and enqueue the starting node
+        q = Queue()
+        q.enqueue(starting_vertex)
+
+        # create set to store visited vertices
+        visited = set()
+
+        while q.size() > 0: # while queue not empty
+            # dequeue first vertex
+            v = q.dequeue()
+            
+            # if it hasn't been visited
+            if v not in visited:
+                # visit it <3 and add to visited set
+                visited.add(v)
+                print(f"BFT Visited {v}")
+
+                # add all neighbors to end of the queue
+                for next_vert in self.get_neighbors(v):
+                    q.enqueue(next_vert)
 
     def dft(self, starting_vertex):
         """
