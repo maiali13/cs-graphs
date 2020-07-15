@@ -1,5 +1,8 @@
-import math, random
+import sys
+import random, math
 
+sys.path.append('../graph')
+from util import Queue
 
 class User:
     def __init__(self, name):
@@ -45,22 +48,24 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-​
+
         # Add users
         for i in range(num_users):
             self.add_user(f"User {i}")
-​
-        # Create friendships
+        
+        # all possible friendship combos
         possible_friendships = []
-​
+
+        # check that last number is larger than 1st number to avoid duplicates
         for user_id in self.users:
             for friend_id in range(user_id + 1, self.last_id + 1):
                 possible_friendships.append((user_id, friend_id))
-​
+        
         # Shuffle the possible friendships
         random.shuffle(possible_friendships)
-​
+
         # Add friendships
+        # we need to divide by 2 since each add_friendship() creates 2 friendships
         for i in range(num_users * avg_friendships // 2):
             friendship = possible_friendships[i]
             self.add_friendship(friendship[0], friendship[1])
@@ -73,9 +78,41 @@ class SocialGraph:
         extended network with the shortest friendship path between them.
 
         The key is the friend's ID and the value is the path.
+
+        BFS for shotest path
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        
+        # if no user ID found
+        if user_id not in self.users:
+            print('WARNING: User id does not exist')
+            return
+        
+        # instantiate queue and enqueue new user id as a list
+        q = Queue()
+        q.enqueue([user_id])
+
+        # iterate thru friends/neighbors breadth-first
+        # while queue is not empty
+        while q.size() > 0:
+            
+            # deueue to path variable
+            path = q.dequeue()
+
+            # set user as last item in the path
+            user = path[-1]
+
+            # if user is not in visited
+            if user not in visited:
+                # set user path in visited
+                visited[user] = path
+
+            for friend in self.friendships[user]:
+                # if neighbor not in visited
+                if friend not in visited:
+                    # add friend to queue and update path
+                    q.enqueue(path + [friend])
+
         return visited
 
 
