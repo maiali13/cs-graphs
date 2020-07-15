@@ -13,6 +13,7 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
+        self.friendships_counter = 0
 
     def add_friendship(self, user_id, friend_id):
         """
@@ -25,6 +26,7 @@ class SocialGraph:
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
+            self.friendships_counter += 1
 
     def add_user(self, name):
         """
@@ -117,8 +119,29 @@ class SocialGraph:
 
 
 if __name__ == '__main__':
+    print('Social graph of 10 users with 2 friends on average:\n')
     sg = SocialGraph()
     sg.populate_graph(10, 2)
     print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
+
+    print('\nGenerating a social graph of 100 users with 10 friends on average:\n')
+    sg = SocialGraph()
+    sg.populate_graph(100, 10)
+    friends = 0
+    for i in range(1, 100):
+        friends += len(sg.friendships[i])
+    print('Average Number of friends: ', friends / 100)
+    print('Number of times add_friendship() was called', sg.friendships_counter, '\n')
+
+
+    print('\nGenerating a social graph of 1000 users with 5 friends on average:\n')
+    sg = SocialGraph()
+    sg.populate_graph(1000, 5)
+    extended = 0
+    for i in sg.get_all_social_paths(random.randint(1, 1000)).items():
+        if len(i[1]) > 2:
+            extended += 1
+    
+    print('Percent of users in extend social network: ', extended / 1000)
