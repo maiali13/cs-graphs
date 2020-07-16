@@ -71,6 +71,42 @@ class SocialGraph:
         for i in range(num_users * avg_friendships // 2):
             friendship = possible_friendships[i]
             self.add_friendship(friendship[0], friendship[1])
+    
+    def populate_graph_linear(self, num_users, avg_friendships):
+        """
+        Stretch: refactor populate_graph to run in O(n) time
+        """
+        # Reset graph
+        self.last_id = 0
+        self.users = {}
+        self.friendships = {}
+       
+        # add users
+        for i in range(num_users):
+            self.add_user(f"User {i+1}")  
+
+        # get target number of friendships
+        target_friendships = (num_users * avg_friendships)
+
+        # set counters for friendships and collisions
+        total_friendships = 0
+        collisions = 0
+
+        # while total friendhips < target
+        while total_friendships < target_friendships:
+            # set user id and friend id to a random int between 1 and number of users
+            user_id = random.randint(1, num_users)
+            friend_id = random.randint(1, num_users)
+
+            # if return of add friendship for user and friend ids = true,
+            if self.add_friendship(user_id, friend_id):
+                # increment friendship counter
+                total_friendships += 2
+            # otherwise increment collision counter
+            else:
+                collisions += 1
+        # print("Total Frienships: {total_friendships} \nTotal Collisions: {collisions}")
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -135,7 +171,6 @@ if __name__ == '__main__':
     print('Average Number of friends: ', friends / 100)
     print('Number of times add_friendship() was called', sg.friendships_counter, '\n')
 
-
     print('\nGenerating a social graph of 1000 users with 5 friends on average:\n')
     sg = SocialGraph()
     sg.populate_graph(1000, 5)
@@ -143,5 +178,4 @@ if __name__ == '__main__':
     for i in sg.get_all_social_paths(random.randint(1, 1000)).items():
         if len(i[1]) > 2:
             extended += 1
-    
     print('Percent of users in extend social network: ', extended / 1000)
